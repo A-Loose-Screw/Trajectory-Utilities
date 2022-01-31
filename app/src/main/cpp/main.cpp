@@ -10,15 +10,29 @@
 
 
 Splines::Spline spline {{
-  {0,0}, {1,0}, {2,0}, {3,0}
+  {0,0}, {2,0}, {4,6}, {5,0}, {6,0}
 }};
 
 
-Splines::CatmullRom catmull;
+// Splines::CatmullRom catmull;
+
+Trajectory<Splines::CatmullRom> trajectory;
 
 int main () {
-  catmull.calculateSpline(spline);
+  trajectory.push_back({
+    {0,0}, {2,0}, {4,6}, {5,0}, {6,0}
+  });
 
-  std::cout << std::fixed << std::setprecision(5) << "Total Length: " << spline.totalLength << std::endl;
+  std::cout << trajectory << std::endl;
+  // std::cout << typeid(trajectory).name() << std::endl;
+
+  // for (double step = 0; step < spline.totalLength; step += 0.1) {
+  //   double t =  catmull.getTFromDistance(step, spline);
+  //   std::cout << "Distance Traveled (Meters): " << step << std::endl;
+  //   Splines::Waypoint point = catmull.getSplinePoint(t, spline);
+  //   std::cout << "Position x,y: (" << point.x << "," << point.y << ")" << std::endl;
+  //   std::cout << "Angle: " << catmull.getSplineAngleDeg(t, spline) << std::endl;
+  // }
+
   return 0;
 }

@@ -5,6 +5,6 @@
 #define MAIN_H
 
 #include <string>
-#include "Splines/CatmullRom.h"
+#include "Trajectory.h"
 
 #endif
