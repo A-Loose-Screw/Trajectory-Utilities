@@ -1,0 +1,3 @@
+#!/bin/bash
+./gradlew clean build
+./app/build/exe/main/debug/linux/app
