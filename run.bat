@@ -1,0 +1,1 @@
+gradlew clean build && app\build\exe\main\debug\windows\app.exe

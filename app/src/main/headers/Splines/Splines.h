@@ -63,15 +63,18 @@ namespace Splines {
    */
   class SplineBase {
    public:
+    SplineBase() {
+      _stepSize = 0.0001;
+    }
     /**
      * Get the spline point from t value and spline
      */
-    virtual Waypoint getSplinePoint(float t, Spline spline) {};
+    virtual Waypoint getSplinePoint(float t, Spline spline) { return {0,0}; };
 
     /**
      * Get gradient point from t value and spline
      */
-    virtual Waypoint getSplineGradientPoint(float t, Spline spline) {};
+    virtual Waypoint getSplineGradientPoint(float t, Spline spline) { return {0,0}; };
 
     /**
      * Get angle in radians based from t value and spline
@@ -97,7 +100,7 @@ namespace Splines {
 
       std::cout << "[Node " << node << "-" << node+1 << "]" << std::endl;
       std::vector<double> lengthBuffer;
-      for (double t = 0.0; t < 1.0; t += stepSize) {
+      for (double t = 0.0; t < 1.0; t += _stepSize) {
         newPoint = getSplinePoint((float)node + t, spline);
         double xrt = (newPoint.x - oldPoint.x)*(newPoint.x - oldPoint.x);
         double yrt = (newPoint.y - oldPoint.y)*(newPoint.y - oldPoint.y);
@@ -110,7 +113,7 @@ namespace Splines {
           if (isinf(bufferValue) || isnan(bufferValue)) {
             bufferValue = 0;
             std::cout << " -- Overflow detected, Debug Below -- " << std::endl;
-            std::cout << "| New points x,y: (" << newPoint.x << "," << newPoint.y << ")" << std::endl;
+            std::cout << "| New points x,y: (" << (double)newPoint.x << "," << (double)newPoint.y << ")" << std::endl;
             std::cout << "| Old points x,y: (" << oldPoint.x << "," << oldPoint.y << ")" << std::endl;
             std::cout << "| t value: " << t << std::endl;
             std::cout << "| XY rt was xrt: (" << xrt << ") & yrt: (" << yrt << ")" << std::endl;
@@ -205,12 +208,12 @@ namespace Splines {
       return t+segmentNum;
     }
 
-    static void setStepSize(double step) {
-      stepSize = step;
+    void setStepSize(double step) {
+      _stepSize = step;
     }
 
    private:
-    inline static double stepSize = 0.0001;
+    double _stepSize = 0.0001;
   };
 }
 

@@ -7,7 +7,6 @@
 
 #include "main.h"
 Trajectory<Splines::CatmullRom> trajectory;
-Splines::CatmullRom cm;
 
 int main () {
   trajectory.push_back({
