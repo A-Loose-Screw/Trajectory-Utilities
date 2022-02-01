@@ -174,8 +174,14 @@ namespace Splines {
       return 0;
     }
 
-    static double getTFromDistance(double distanceMeters, Splines::Spline spline) {
-      // int segments = spline.segmentNum;
+    /**
+     * @brief Get the t value through a spline based on distance
+     * 
+     * @param distanceMeters 
+     * @param spline 
+     * @return double 
+     */
+    static double getDist2t(double distanceMeters, Splines::Spline spline) {
       int segmentNum = 0;
 
       // Determin segment number

@@ -6,33 +6,17 @@
 #include <stdlib.h>
 
 #include "main.h"
-
-
-
-Splines::Spline spline {{
-  {0,0}, {2,0}, {4,6}, {5,0}, {6,0}
-}};
-
-
-// Splines::CatmullRom catmull;
-
 Trajectory<Splines::CatmullRom> trajectory;
+Splines::CatmullRom cm;
 
 int main () {
   trajectory.push_back({
-    {0,0}, {2,0}, {4,6}, {5,0}, {6,0}
+    {0,0}, {2,0}, {4,10}, {5,2}, {6,0}
   });
 
-  std::cout << trajectory << std::endl;
-  // std::cout << typeid(trajectory).name() << std::endl;
-
-  // for (double step = 0; step < spline.totalLength; step += 0.1) {
-  //   double t =  catmull.getTFromDistance(step, spline);
-  //   std::cout << "Distance Traveled (Meters): " << step << std::endl;
-  //   Splines::Waypoint point = catmull.getSplinePoint(t, spline);
-  //   std::cout << "Position x,y: (" << point.x << "," << point.y << ")" << std::endl;
-  //   std::cout << "Angle: " << catmull.getSplineAngleDeg(t, spline) << std::endl;
-  // }
+  trajectory.build();
+  trajectory.print();
+  trajectory.simulate();
 
   return 0;
 }
