@@ -13,7 +13,7 @@ int main () {
     {0,0}, {1,0}, {2,0}, {3,0}
   });
 
-  trajectory.build(0.001);
+  trajectory.build(0.0001);
   trajectory.print();
   // trajectory.simulate();
 

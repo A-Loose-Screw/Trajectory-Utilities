@@ -114,7 +114,10 @@ namespace Splines {
       for (double t = 0.0; t < 1.0; t += _stepSize) {
         newPoint = getSplinePoint((float)node + t, spline);
 
+        // 1 means end of spline so return
         if (newPoint.flag != 0 || oldPoint.flag != 0) {
+          printProgress(1);
+          std::cout << " Complete" << std::endl;
           return segLength;
         }
 
@@ -144,9 +147,6 @@ namespace Splines {
         printProgress(t);
       }
 
-      printProgress(1);
-      std::cout << " Complete" << std::endl;
-
       return segLength;
     }
 
@@ -161,24 +161,20 @@ namespace Splines {
       int nodeNum = spline.points.size();
       std::cout << "-- Calculating Length of spline --" << std::endl;
       std::cout << "-- Total Nodes: " << nodeNum << std::endl;
-      std::vector<double> bufferLength;
       for (size_t node = removeNodes; node < nodeNum - removeNodes; node++) {
         double segLength = calculateSegLength(node, spline);
         if (segLength == -1) {
           std::cout << "Segment Length Error" << std::endl;
           return -1;
         } else {
-          bufferLength.push_back(segLength);
-        }
-      }
 
-      for (size_t i = 0; i < bufferLength.size(); i++) {
-        spline.points[i].segLength = bufferLength[i];
-        spline.totalLength += bufferLength[i];
-        spline.points[i].totalLength = spline.totalLength;
-        if (spline.points[i].segLength > 0) {
-          spline.segmentNum++;
-          std::cout << "Segment " << i << "-" << i+1 << ", Length: " << spline.points[i].segLength << ", Length up to and including: " << spline.points[i].totalLength << std::endl; 
+          spline.points[node].segLength = segLength;
+          spline.totalLength += segLength;
+          spline.points[node].totalLength = spline.totalLength;
+          if (spline.points[node].segLength > 0) {
+            spline.segmentNum++;
+            std::cout << "Segment " << node << "-" << node+1 << ", Length: " << spline.points[node].segLength << ", Length up to and including: " << spline.points[node].totalLength << std::endl; 
+          }
         }
       }
 
