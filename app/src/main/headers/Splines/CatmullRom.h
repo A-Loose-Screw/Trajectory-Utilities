@@ -6,13 +6,19 @@
 namespace Splines {
   class CatmullRom : public SplineBase {
    public:
-    Waypoint getSplinePoint(float t, Spline spline) override {
+    SplinePoint getSplinePoint(float t, Spline spline) override {
+      int flag = 0;
+
       int p0, p1, p2, p3;
 
       p1 = (int)t + 1;
       p2 = p1 + 1;
       p3 = p2 + 1;
       p0 = p1 - 1;
+
+      if (p3 >= spline.points.size()) {
+        return {{0,0}, 1};
+      }
 
       t = t - (int)t;
 
@@ -27,10 +33,12 @@ namespace Splines {
       float tx = 0.5f * (spline.points[p0].x * q1 + spline.points[p1].x * q2 + spline.points[p2].x * q3 + spline.points[p3].x * q4);
       float ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
 
-      return{ tx, ty };
+      return{ {tx,ty}, flag };
     }
 
-    Waypoint getSplineGradientPoint(float t, Spline spline) override {
+    SplinePoint getSplineGradientPoint(float t, Spline spline) override {
+      int flag = 0;
+
       int p0, p1, p2, p3;
       p1 = (int)t + 1;
       p2 = p1 + 1;
@@ -49,7 +57,7 @@ namespace Splines {
       float tx = 0.5f * (spline.points[p0].x * q1 + spline.points[p1].x * q2 + spline.points[p2].x * q3 + spline.points[p3].x * q4);
       float ty = 0.5f * (spline.points[p0].y * q1 + spline.points[p1].y * q2 + spline.points[p2].y * q3 + spline.points[p3].y * q4);
 
-      return { tx, ty };
+      return { {tx,ty}, flag };
     }
   };
 };

@@ -31,9 +31,14 @@ static void printProgress(double percentage) {
 
 namespace Splines {
   struct Waypoint {
-    long double x = 0, y = 0; // you'd be surprised how much this breaks if it's not long double...
+    double x = 0, y = 0; // you'd be surprised how much this breaks if it's not long double...
     double segLength = 0; // length of segment
     double totalLength = 0; // length of everything up to and including this segment
+  };
+
+  struct SplinePoint {
+    Waypoint waypoint;
+    int flag;
   };
 
   struct Spline {
@@ -68,20 +73,26 @@ namespace Splines {
     }
     /**
      * Get the spline point from t value and spline
+     * Returns waypoint and flag
      */
-    virtual Waypoint getSplinePoint(float t, Spline spline) { return {0,0}; };
+    virtual SplinePoint getSplinePoint(float t, Spline spline) { return {{0,0},0}; };
 
     /**
      * Get gradient point from t value and spline
      */
-    virtual Waypoint getSplineGradientPoint(float t, Spline spline) { return {0,0}; };
+    virtual SplinePoint getSplineGradientPoint(float t, Spline spline) { return {{0,0},0}; };
 
     /**
      * Get angle in radians based from t value and spline
+     * returns waypoint and flag
      */
     virtual double getSplineAngleRad(float t, Spline spline) {
-      Waypoint gradient = getSplineGradientPoint(t, spline);
-      return atan2(gradient.y, gradient.x);
+      SplinePoint gradientPoint = getSplineGradientPoint(t, spline);
+      if (gradientPoint.flag != -1) {
+        return atan2(gradientPoint.waypoint.y, gradientPoint.waypoint.x);
+      } else {
+        return 0;
+      }
     }
 
     /**
@@ -95,35 +106,40 @@ namespace Splines {
      * Calculate the length of a segment, using the node (int) and spline
      */
     virtual double calculateSegLength(int node, Spline spline) {
-      Waypoint oldPoint, newPoint;
+      double segLength = 0;
+      SplinePoint oldPoint, newPoint;
       oldPoint = getSplinePoint((float)node, spline);
 
       std::cout << "[Node " << node << "-" << node+1 << "]" << std::endl;
-      std::vector<double> lengthBuffer;
       for (double t = 0.0; t < 1.0; t += _stepSize) {
         newPoint = getSplinePoint((float)node + t, spline);
-        double xrt = (newPoint.x - oldPoint.x)*(newPoint.x - oldPoint.x);
-        double yrt = (newPoint.y - oldPoint.y)*(newPoint.y - oldPoint.y);
+
+        if (newPoint.flag != 0 || oldPoint.flag != 0) {
+          return segLength;
+        }
+
+        double xrt = (newPoint.waypoint.x - oldPoint.waypoint.x)*(newPoint.waypoint.x - oldPoint.waypoint.x);
+        double yrt = (newPoint.waypoint.y - oldPoint.waypoint.y)*(newPoint.waypoint.y - oldPoint.waypoint.y);
         double xyrt = (xrt+yrt);
         
-        double bufferValue = 0;
+        double bufferLength = 0;
 
         if (xyrt > 0) {
-          bufferValue = sqrt(xyrt);
-          if (isinf(bufferValue) || isnan(bufferValue)) {
-            bufferValue = 0;
+          bufferLength = sqrt(xyrt);
+          if (isinf(bufferLength) || isnan(bufferLength)) {
+            bufferLength = 0;
             std::cout << " -- Overflow detected, Debug Below -- " << std::endl;
-            std::cout << "| New points x,y: (" << (double)newPoint.x << "," << (double)newPoint.y << ")" << std::endl;
-            std::cout << "| Old points x,y: (" << oldPoint.x << "," << oldPoint.y << ")" << std::endl;
+            std::cout << "| New points x,y: (" << (double)newPoint.waypoint.x << "," << (double)newPoint.waypoint.y << ")" << std::endl;
+            std::cout << "| Old points x,y: (" << oldPoint.waypoint.x << "," << oldPoint.waypoint.y << ")" << std::endl;
             std::cout << "| t value: " << t << std::endl;
             std::cout << "| XY rt was xrt: (" << xrt << ") & yrt: (" << yrt << ")" << std::endl;
             return -1;
           }
         } else {
-          bufferValue = 0;
+          bufferLength = 0;
         }
 
-        lengthBuffer.push_back(bufferValue);
+        segLength += bufferLength;
         oldPoint = newPoint;
         printProgress(t);
       }
@@ -131,13 +147,7 @@ namespace Splines {
       printProgress(1);
       std::cout << " Complete" << std::endl;
 
-      // Add the values up
-      double totalLength = 0;
-      for (size_t i = 0; i < lengthBuffer.size(); i++) {
-        totalLength += lengthBuffer[i];
-      }
-
-      return totalLength;
+      return segLength;
     }
 
     /**

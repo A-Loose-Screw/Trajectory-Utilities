@@ -10,12 +10,12 @@ Trajectory<Splines::CatmullRom> trajectory;
 
 int main () {
   trajectory.push_back({
-    {0,0}, {2,0}, {4,10}, {5,2}, {6,0}
+    {0,0}, {1,0}, {2,0}, {3,0}
   });
 
-  trajectory.build();
+  trajectory.build(0.001);
   trajectory.print();
-  trajectory.simulate();
+  // trajectory.simulate();
 
   return 0;
 }
