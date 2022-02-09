@@ -95,6 +95,46 @@ class Trajectory {
     }
   }
 
+  /**
+   * Used for wrapping around a range. E.g, if current angle is 175 and goal is -180. Both 180 and -180 are the same.
+   * So don't spin the robot all the way around. instead just go to 180 degrees
+   */
+  double wrap(double val, double range = 0) {
+    if (range > 0) {
+      val = std::fmod(val, range);
+      if (std::abs(val) > (range/2.0)) {
+        return (val > 0) ? val - range : val + range;
+      }
+    }
+
+    return val;
+  }
+
+  /**
+   * @brief At Waypoint,
+   * @param waypoint add waypoint number (object relative, e.g waypoint 0 is where the object starts from)
+   * @param distande current object distance along trajectory
+   * @param continous return true just once when it has reached/passed the waypoint
+   * Returns true if object is at waypoint, or if set to do so, return true if object has passed waypoint
+   */
+  bool atWaypoint(int waypoint, double distance, bool once = false) {
+    if (waypoint < 0 || waypoint > (int)_trajectory.points.size()-1) {
+      std::cout << "At Waypoint <" << waypoint << "> Out of Scope" << std::endl;
+    } else {
+      auto &point = _trajectory.points[waypoint];
+
+      bool passedPoint = distance >= point.totalLength ? true : false;
+      if (!point.complete) {
+        point.complete = passedPoint;
+        return point.complete;
+      } else {
+        return once ? false : point.complete;
+      }
+    }
+
+    return false;
+  }
+
  private:
   Splines::Spline _trajectory;
   SplineType _sType;

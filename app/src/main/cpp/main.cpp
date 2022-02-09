@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "main.h"
+#include "Trajectory.h"
 Trajectory<Splines::CatmullRom> trajectory;
 
 int main () {

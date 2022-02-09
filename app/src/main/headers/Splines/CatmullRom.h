@@ -16,7 +16,7 @@ namespace Splines {
       p3 = p2 + 1;
       p0 = p1 - 1;
 
-      if (p3 >= spline.points.size()) {
+      if (p3 >= (int)spline.points.size()) {
         return {{0,0}, 1};
       }
 
@@ -45,6 +45,10 @@ namespace Splines {
       p3 = p2 + 1;
       p0 = p1 - 1;
 
+      if (p3 >= (int)spline.points.size()) {
+        return {{0,0}, 1};
+      }
+
       t = t - (int)t;
 
       float tt = t * t;
@@ -60,6 +64,6 @@ namespace Splines {
       return { {tx,ty}, flag };
     }
   };
-};
+}
 
 #endif

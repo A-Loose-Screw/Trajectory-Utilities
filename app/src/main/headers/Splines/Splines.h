@@ -30,10 +30,17 @@ static void printProgress(double percentage) {
 }
 
 namespace Splines {
+  /**
+   * @brief Controllable/Reusable waypoint
+   * Used for defining x,y point and variables processed afterwards
+   * Inlcuding boolean for control theory, (if object has passed this waypoint)
+   * 
+   */
   struct Waypoint {
     double x = 0, y = 0; // you'd be surprised how much this breaks if it's not long double...
     double segLength = 0; // length of segment
     double totalLength = 0; // length of everything up to and including this segment
+    bool complete = false;
   };
 
   struct SplinePoint {
@@ -61,7 +68,7 @@ namespace Splines {
     static double d2r(double deg) {
       return (deg * M_PI / 180);
     }
-  };
+  }
 
   /**
    * Virtual Spline Base with common functions for splines
@@ -161,7 +168,7 @@ namespace Splines {
       int nodeNum = spline.points.size();
       std::cout << "-- Calculating Length of spline --" << std::endl;
       std::cout << "-- Total Nodes: " << nodeNum << std::endl;
-      for (size_t node = removeNodes; node < nodeNum - removeNodes; node++) {
+      for (int node = removeNodes; node < nodeNum - removeNodes; node++) {
         double segLength = calculateSegLength(node, spline);
         if (segLength == -1) {
           std::cout << "Segment Length Error" << std::endl;
@@ -193,9 +200,10 @@ namespace Splines {
     static double getDist2t(double distanceMeters, Splines::Spline spline) {
       int segmentNum = 0;
 
-      // Determin segment number
-      while (distanceMeters > spline.points[segmentNum].totalLength) {
-        segmentNum++;
+      for (size_t i = 0; i < spline.points.size(); i++) {
+        if (distanceMeters > spline.points[i].totalLength) {
+          segmentNum = segmentNum >= (int)spline.points.size() ? (int)spline.points.size() : segmentNum+1;
+        }
       }
 
       double distAlongSegment = 0;
