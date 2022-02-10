@@ -1,4 +1,4 @@
-# Trajectory-Utilities
-Raw C++ implementation of 2d and 3d splines for trajectories.
+# Trajectory Utiltiies
 
-- Header Library, location `app/src/main/headers`
+### Spline Algorithms abstracted for moving objects following trajectories
+

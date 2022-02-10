@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'Trajectory-Utilities'
-include('app')
+include('lib')
