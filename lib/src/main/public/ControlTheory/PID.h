@@ -52,7 +52,9 @@ namespace PID {
 
   class PIDController {
    public:
-    PIDController(PIDGains &gains, double setpoint = 0) : _gains(gains) {}
+    PIDController(PIDGains &gains, double setpoint = 0) : _gains(gains) {
+      setSetpoint(setpoint, true);
+    }
 
     void setSetpoint(double setpoint, bool reset = true) {
       if (reset) resetValues();
@@ -82,8 +84,8 @@ namespace PID {
       _wrapRange = range;
     }
 
-    double calculate(double processingVariable, double dt, double feedforward = 0) {
-      double error = wrap(_setpoint-processingVariable);
+    double calculate(double processingVariable, double dt, double feedforward = 0.0) {
+      double error = wrap(_setpoint - processingVariable);
 
       if (_threshIZone > 0 && std::abs(error) > _threshIZone) _integral = 0; // I zone
       else _integral += error * dt; // Calc I
