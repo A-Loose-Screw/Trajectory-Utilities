@@ -1,4 +1,4 @@
-#include "Trajectory-Utilities.h"
+#include "TrajectoryUtilities.h"
 #include <iostream>
 
 int main() {
