@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./ui/build/exe/uI/UI

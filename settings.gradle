@@ -9,5 +9,13 @@
 
 rootProject.name = 'Trajectory-Utilities'
 include('TrajectoryUtils')
-include('imgui')
 include('ui')
+
+// Vendor libs
+include('imgui')
+include('glfw')
+include('glad')
+
+project(':imgui').projectDir = file('vendors/imgui')
+project(':glfw').projectDir = file('vendors/glfw')
+project(':glad').projectDir = file('vendors/glad')

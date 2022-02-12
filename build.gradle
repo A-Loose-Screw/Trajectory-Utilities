@@ -1,6 +1,7 @@
 import static org.apache.tools.ant.taskdefs.condition.Os.*
 
 plugins {
+  id 'c'
   // cpp
   id 'cpp'
 
@@ -12,6 +13,42 @@ plugins {
 
   // Doxygen
   id 'org.ysb33r.doxygen' version '0.7.0'
+}
+
+[FAMILY_WINDOWS, FAMILY_UNIX, FAMILY_MAC].each { osName ->
+  // Create Task
+  if (!project.tasks.findByName("$osName")) {
+    tasks.create(osName) {
+      description "OS is ${osName}"
+      
+      // Add condition to check operating system.
+      onlyIf { isFamily(osName) }
+
+      doLast {
+        println "Execution Family: '${it.name}'"
+        println "Family:            ${OS_NAME}"
+        println "Version:           ${OS_VERSION}"
+        println "Architecture:      ${OS_ARCH}"
+      }
+    }
+
+    // Add task as dependency for the os task
+    build.dependsOn(osName)
+  }
+}
+
+if (isFamily(FAMILY_WINDOWS)) {
+  rootProject.ext.set('isWINDOWS', true)
+  rootProject.ext.set('isUNIX', false)
+  rootProject.ext.set('isMAC', false)
+} else if (isFamily(FAMILY_UNIX)) {
+  rootProject.ext.set('isWINDOWS', false)
+  rootProject.ext.set('isUNIX', true)
+  rootProject.ext.set('isMAC', false)
+} else if (isFamily(FAMILY_MAC)) {
+  rootProject.ext.set('isWINDOWS', false)
+  rootProject.ext.set('isUNIX', false)
+  rootProject.ext.set('isMAC', true)
 }
 
 wrapper {

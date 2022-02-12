@@ -1,0 +1,21 @@
+ext {
+  nativeName = 'glad'
+  binaryType = NativeLibrarySpec
+  req_proj_libs = []
+  req_libs = []
+
+  compiler_defines = []
+
+  lib_link = 'shared'
+
+  srcLoc = 'src'
+
+  // Default files
+  srcIncludeFiles = ["**/*.cpp", "**/*.cc", "**/*.c"]
+  srcExcludeFiles = []
+
+  headersLoc = ['include']
+}
+
+
+apply from: rootProject.file('shared/cppBuild.gradle')

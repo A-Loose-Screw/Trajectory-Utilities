@@ -1,15 +1,18 @@
 ext {
   nativeName = 'UI'
   binaryType = NativeExecutableSpec
-  req_proj_libs = ['TrajectoryUtils', 'imgui']
+  req_proj_libs = ['TrajectoryUtils', 'imgui', 'glfw']
   req_libs = []
+
+  compiler_defines = []
 
   lib_link = 'shared'
 
   srcLoc = 'src/cpp'
   srcIncludeFiles = ['**/*.cpp', '**/*.cc']
+  srcExcludeFiles = []
 
   headersLoc = 'src/headers'
 }
 
-apply from: project.file('../mainBuild.gradle')
+apply from: rootProject.file('shared/cppBuild.gradle')

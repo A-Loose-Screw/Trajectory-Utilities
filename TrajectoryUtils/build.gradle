@@ -4,11 +4,14 @@ ext {
   req_proj_libs = []
   req_libs = []
 
+  compiler_defines = []
+
   lib_link = 'shared'
 
   srcLoc = 'src/main/cpp'
   srcIncludeFiles = ['**/*.cpp', '**/*.cc']
+  srcExcludeFiles = []
   headersLoc = 'src/main/public'
 }
 
-apply from: project.file('../mainBuild.gradle')
+apply from: rootProject.file('shared/cppBuild.gradle')
