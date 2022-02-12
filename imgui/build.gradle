@@ -1,0 +1,14 @@
+ext {
+  nativeName = 'imgui'
+  binaryType = NativeLibrarySpec
+  req_proj_libs = []
+  req_libs = []
+
+  lib_link = 'shared'
+
+  srcLoc = 'imgui'
+  srcIncludeFiles = ['*.cpp']
+  headersLoc = 'imgui'
+}
+
+apply from: project.file('../mainBuild.gradle')

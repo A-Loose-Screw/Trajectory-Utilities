@@ -8,4 +8,6 @@
  */
 
 rootProject.name = 'Trajectory-Utilities'
-include('lib')
+include('TrajectoryUtils')
+include('imgui')
+include('ui')

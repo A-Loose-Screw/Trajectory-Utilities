@@ -1,0 +1,14 @@
+ext {
+  nativeName = 'TrajectoryUtils'
+  binaryType = NativeLibrarySpec
+  req_proj_libs = []
+  req_libs = []
+
+  lib_link = 'shared'
+
+  srcLoc = 'src/main/cpp'
+  srcIncludeFiles = ['**/*.cpp', '**/*.cc']
+  headersLoc = 'src/main/public'
+}
+
+apply from: project.file('../mainBuild.gradle')

@@ -1,0 +1,15 @@
+ext {
+  nativeName = 'UI'
+  binaryType = NativeExecutableSpec
+  req_proj_libs = ['TrajectoryUtils', 'imgui']
+  req_libs = []
+
+  lib_link = 'shared'
+
+  srcLoc = 'src/cpp'
+  srcIncludeFiles = ['**/*.cpp', '**/*.cc']
+
+  headersLoc = 'src/headers'
+}
+
+apply from: project.file('../mainBuild.gradle')
