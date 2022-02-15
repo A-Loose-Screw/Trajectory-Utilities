@@ -1,0 +1,11 @@
+apply from: project.file("${projectRoot}/shared-gradle/ext.gradle")
+
+ext {
+  nativeName = "TrajectoryUtilities"
+  binarySpec = NativeLibrarySpec
+
+  srcLoc = "src/main/cpp"
+  headersLoc = "src/main/public"
+}
+
+apply from: project.file("$projectRoot/shared-gradle/cppBuild.gradle")

@@ -1,0 +1,48 @@
+import static org.apache.tools.ant.taskdefs.condition.Os.*
+plugins {
+  id "c"
+  id "cpp"
+}
+
+project.ext.set('projectRoot', "$projectDir")
+
+[FAMILY_WINDOWS, FAMILY_UNIX, FAMILY_MAC].each { osName ->
+  // Create Task
+  if (!project.tasks.findByName("$osName")) {
+    tasks.create(osName) {
+      description "OS is ${osName}"
+      
+      // Add condition to check operating system.
+      onlyIf { isFamily(osName) }
+
+      doLast {
+        println "Execution Family: '${it.name}'"
+        println "Family:            ${OS_NAME}"
+        println "Version:           ${OS_VERSION}"
+        println "Architecture:      ${OS_ARCH}"
+      }
+    }
+
+    // Add task as dependency for the os task
+    build.dependsOn(osName)
+  }
+}
+
+if (isFamily(FAMILY_WINDOWS)) {
+  rootProject.ext.set('isWINDOWS', true)
+  rootProject.ext.set('isUNIX', false)
+  rootProject.ext.set('isMAC', false)
+} else if (isFamily(FAMILY_UNIX)) {
+  rootProject.ext.set('isWINDOWS', false)
+  rootProject.ext.set('isUNIX', true)
+  rootProject.ext.set('isMAC', false)
+} else if (isFamily(FAMILY_MAC)) {
+  rootProject.ext.set('isWINDOWS', false)
+  rootProject.ext.set('isUNIX', false)
+  rootProject.ext.set('isMAC', true)
+}
+
+
+wrapper {
+  gradleVersion = '7.3.3'
+}
