@@ -1,0 +1,4 @@
+apply plugin: 'cpp'
+
+project.ext.set('projectRoot', "$projectDir/..") // needs to be relative
+apply from: project.file("$projectRoot/mainBuilder.gradle")

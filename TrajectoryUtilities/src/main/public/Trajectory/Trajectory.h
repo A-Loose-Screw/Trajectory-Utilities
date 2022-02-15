@@ -57,7 +57,7 @@ class Trajectory {
    */
   Splines::Waypoint getCoords(double dist) {
     double t = _sType.getDist2t(dist, _trajectory);
-    return _sType.getSplinePoint(t, _trajectory);
+    return _sType.getSplinePoint(t, _trajectory).waypoint;
   }
 
   Splines::Spline &getRawTrajectory() { 

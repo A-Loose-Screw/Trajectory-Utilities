@@ -1,0 +1,62 @@
+apply plugin: 'c'
+
+
+model {
+  platforms {
+    x86 {
+      architecture "x86"
+    }
+
+    x64 {
+      architecture "x86_64"
+    }
+  }
+
+  components {
+    "${nativeName}"(binarySpec) {
+      targetPlatform "x64"
+      sources {
+        c {
+          source {
+            srcDir srcLoc
+            include srcIncludeFiles
+          }
+
+          exportedHeaders {
+            srcDir headersLoc
+          }
+        }
+      }
+
+      binaries.all {
+        if (req_proj_libs.size() >= 1) {
+          req_proj_libs.each { req_lib ->
+            lib project: ":${req_lib}", library: "${req_lib}", linkage: "${lib_link}"
+          }
+        }
+
+        if (req_libs.size() >= 1) {
+          req_libs.each { req_lib ->
+            lib library: "${req_lib}"
+          }
+        }
+
+        if (compiler_defines.size() >= 1) {
+          compiler_defines.each { compiler_define ->
+            cCompiler.define "${compiler_define}"
+          }
+        }
+
+        if (linker_args.size() >= 1) {
+          linker_args.each { linker_arg ->
+            linker.args linker_arg
+          }
+        }
+      }
+
+      // binaries.withType(SharedLibraryBinarySpec) { binary ->
+      //   buildable = false
+      // }
+    }
+  }
+}

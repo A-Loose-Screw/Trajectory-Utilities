@@ -1,0 +1,10 @@
+apply from: project.file("${projectRoot}/shared-gradle/ext.gradle")
+
+ext {
+  nativeName = "TrajectoryUtilities-Test"
+  binarySpec = NativeExecutableSpec
+
+  req_proj_libs = ["TrajectoryUtilities"]
+}
+
+apply from: project.file("$projectRoot/shared-gradle/cppBuild.gradle")
