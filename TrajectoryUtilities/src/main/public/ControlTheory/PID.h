@@ -15,7 +15,7 @@ namespace PID {
     PIDGains(std::string name, double kP = 0, double kI = 0, double kD = 0, double kF = 0) : _name(name), _kP(kP), _kI(kI), _kD(kD), _kF(kF) {}
     PIDGains(const PIDGains &other) : PIDGains(other._name, other._kP, other._kI, other._kD, other._kF) {}
 
-    void scheduleGains(double kP, double kI, double kD, double kF = 0) {
+    void setGains(double kP, double kI, double kD, double kF = 0) {
       _kP = kP;
       _kI = kI;
       _kD = kD;
@@ -52,8 +52,20 @@ namespace PID {
 
   class PIDController {
    public:
-    PIDController(PIDGains &gains, double setpoint = 0) : _gains(gains) {
+    PIDController(PIDGains &gains, double setpoint = 0) : _gains(gains), _defaultGains(gains) {
       setSetpoint(setpoint, true);
+    }
+
+    void setDefaultGains(PIDGains gains) {
+      _defaultGains = gains;
+    }
+
+    void scheduleGains(PIDGains &gains) {
+      _gains = gains;
+    }
+
+    void scheduleDefaultGains() {
+      _gains = _defaultGains;
     }
 
     void setSetpoint(double setpoint, bool reset = true) {
@@ -87,8 +99,13 @@ namespace PID {
     double calculate(double processingVariable, double dt, double feedforward = 0.0) {
       double error = wrap(_setpoint - processingVariable);
 
-      if (_threshIZone > 0 && std::abs(error) > _threshIZone) _integral = 0; // I zone
-      else _integral += error * dt; // Calc I
+      // I zone
+      if ( (_threshIZone > 0) && (std::abs(error) > _threshIZone) ) {
+        _integral = 0; // I zone
+      } else {
+        _integral += error * dt; // Calc I
+      }
+
       _derivative = dt > 0 ? (error - _lastError) / dt : 0; // Calc D
 
       double output = _gains.GetkP() * error + _gains.GetkI() * _integral + _gains.GetkD() * _derivative + _gains.GetkF() * feedforward;
@@ -110,6 +127,7 @@ namespace PID {
 
    private:
     PIDGains &_gains;
+    PIDGains _defaultGains;
 
     double wrap(double val) {
       if (_wrapRange > 0) {
