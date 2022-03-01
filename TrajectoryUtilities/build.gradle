@@ -1,4 +1,4 @@
-apply from: project.file("${projectRoot}/shared-gradle/ext.gradle")
+apply from: project.file("../shared-gradle/ext.gradle")
 
 ext {
   nativeName = "TrajectoryUtilities"
@@ -8,4 +8,4 @@ ext {
   headersLoc = "src/main/public"
 }
 
-apply from: project.file("$projectRoot/shared-gradle/cppBuild.gradle")
+apply from: project.file("../shared-gradle/cppBuild.gradle")

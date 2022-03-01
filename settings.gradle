@@ -10,3 +10,14 @@
 rootProject.name = 'Trajectory-Utilities'
 include('TrajectoryUtilities')
 include('Test')
+
+// UI Core
+include('UI-Core')
+include('GLFW')
+include('GLAD')
+include('IMGUI')
+
+project(':UI-Core').projectDir = file("UI_Core/UI-Core")
+project(':GLFW').projectDir = file("UI_Core/vendors/GLFW")
+project(':GLAD').projectDir = file("UI_Core/vendors/GLAD")
+project(':IMGUI').projectDir = file("UI_Core/vendors/IMGUI")

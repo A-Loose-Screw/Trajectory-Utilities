@@ -1,0 +1,4 @@
+[submodule "UI_Core"]
+  path = UI_Core
+  branch = mastera
+  url = https://github.com/CJBuchel/UI_Core.git
