@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "internal.h": "c",
+    "glfw3.h": "c"
+  }
+}

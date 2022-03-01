@@ -1,0 +1,44 @@
+apply plugin: 'org.ysb33r.doxygen'
+apply plugin: 'cpp'
+apply plugin: 'google-test-test-suite'
+apply plugin: 'base'
+
+model {
+  components {
+    "${nativeName}"(binaryType) {
+      sources {
+        cpp {
+          source {
+            srcDir srcLoc
+            include srcIncludeFiles
+            exclude srcExcludeFiles
+          }
+
+          exportedHeaders {
+            srcDir headersLoc
+          }
+        }
+      }
+
+      binaries.all {
+        if (req_proj_libs.size() >= 1) {
+          req_proj_libs.each { req_lib ->
+            lib project: ":${req_lib}", library: "${req_lib}", linkage: "${lib_link}"
+          }
+        }
+
+        if (req_libs.size() >= 1) {
+          req_libs.each { req_lib ->
+            lib library: "${req_lib}"
+          }
+        }
+
+        if (compiler_defines.size() >= 1) {
+          compiler_defines.each { compiler_define ->
+            cppCompiler.define "${compiler_define}"
+          }
+        }
+      }
+    }
+  }
+}
